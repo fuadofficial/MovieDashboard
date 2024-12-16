@@ -1,5 +1,4 @@
 import { GoPencil } from "react-icons/go";
-import { BiTrashAlt } from "react-icons/bi";
 import MovieStars from "./MovieStars";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -20,8 +19,8 @@ const MovieCard = ({ data, setmovielist, movielist }) => {
       <figure className="w-2/3">
         <img
           className="h-full"
-          src={imageName}
-          alt="Movie"
+          src={imageName || "/placeholder.jpg"} // Use a placeholder if imageName is empty
+          alt={movieName || "Movie"}
         />
       </figure>
       <div className="card-body space-y-1">

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { GoPencil } from "react-icons/go";
-// import { BiTrashAlt } from "react-icons/bi";
 import axios from "axios";
 import { GENRE_API_URL } from "../constants/const";
 import ConfirmDialog from "../components/ConfirmDialog";
@@ -65,7 +64,7 @@ function AddGenre() {
                 <div>
                     <div className="form-control w-full">
                         <label className="label">
-                            <span className="label-text">Title</span>
+                            <span className="label-text text-white">Title</span>
                         </label>
                         <div className="flex w-full gap-3 text-black">
                             <input
@@ -82,9 +81,9 @@ function AddGenre() {
                     </div>
 
                     <div className="flex  flex-wrap">
-                        {genreList.map((item) => (
+                        {genreList.map((item,index) => (
                             <div
-                                key={item._id}
+                                key={item._id || index}
                                 className="w-1/4 m-5 border-2 border-gray-700 p-2 rounded-md">
                                 <div className="flex justify-end space-x-2 border-b-[1px] border-b-gray-700 pb-3">
                                     <div onClick={() => handleEditGenre(item._id, item.genre)}>
