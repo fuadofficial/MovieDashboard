@@ -1,9 +1,11 @@
 # Movie Dashboard
 
 
-![Screenshot (12)](https://github.com/user-attachments/assets/5701e1de-4fe8-4d4d-91a3-97efeb427647)
 ![Screenshot (9)](https://github.com/user-attachments/assets/3271a959-3188-481b-a548-113afd25a916)
+
 ![Screenshot (11)](https://github.com/user-attachments/assets/43079edb-17cf-4ab3-9b6f-721267828b8c)
+
+![Screenshot (12)](https://github.com/user-attachments/assets/5701e1de-4fe8-4d4d-91a3-97efeb427647)
 
 
 
