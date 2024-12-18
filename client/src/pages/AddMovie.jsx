@@ -14,7 +14,7 @@ const AddMovie = () => {
     const [checkedGenre, setCheckedGenre] = useState([]);
     const [movieName, setMovieName] = useState("");
     const [movieId, setMovieId] = useState(0);
-    const [selectImageUrl, setSelecedImageUrl] = useState("");
+    const [selectImageUrl, setSelecedImageUrl] = useState(null);
 
     const navigate = useNavigate();
     const param = useParams();
@@ -36,9 +36,8 @@ const AddMovie = () => {
         setCheckedGenre(genre);
         setMovieName(movieName);
         setMovieId(_id);
-        setSelecedImageUrl(imageName); // Ensure the image URL is correctly set
+        setSelecedImageUrl(imageName);
     };
-    
 
     const handleRatingChange = (e) => {
         setRating(e.target.value);
@@ -61,55 +60,60 @@ const AddMovie = () => {
 
     const handleImage = (event) => {
         const img = event.target.files[0];
-        setImg(img);
-        setSelecedImageUrl(URL.createObjectURL(img));
+        if (img) {
+            setImg(img);
+            setSelecedImageUrl(URL.createObjectURL(img));
+        }
     };
 
     const handleAddMovie = async () => {
-        let movieImgUrl = selectImageUrl; // Use existing image URL by default
-    
         try {
-            // Upload a new image if selected
+            let movieImgUrl = selectImageUrl; // Use existing image URL by default
+
             if (img) {
+                // Upload new image to Cloudinary
                 const data = new FormData();
                 data.append("upload_preset", import.meta.env.VITE_UPLOAD_PRESET);
                 data.append("file", img);
-    
-                const config = {
+
+                const response = await fetch(CLOUDINARY_IMAGE_UPLOAD_URL, {
                     method: "POST",
                     body: data,
-                };
-                const response = await fetch(CLOUDINARY_IMAGE_UPLOAD_URL, config);
-                const responseData = await response.json();
-    
-                if (!responseData.url) {
-                    throw new Error("Image upload failed");
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to upload image to Cloudinary");
                 }
-    
-                movieImgUrl = responseData.url; // Update with new image URL
+
+                const responseData = await response.json();
+                movieImgUrl = responseData.url; // Use the uploaded image URL
             }
-    
-            // Post movie data
-            const response = await axios(MOVIE_API_URL, {
-                method: "POST",
-                data: {
-                    imageName: movieImgUrl, // Use the correct field name
-                    movieName,
-                    id: movieId,
-                    rating,
-                    genre: checkedGenre,
-                },
-            });
-    
+
+            if (!movieImgUrl) {
+                alert("Image URL is required");
+                return;
+            }
+
+            // Send data to backend
+            const payload = {
+                movieName,
+                id: movieId,
+                rating,
+                genre: checkedGenre,
+                imageName: movieImgUrl, // Save image URL to backend
+            };
+
+            const response = await axios.post(MOVIE_API_URL, payload);
+
             if (response.status === 200) {
-                navigate("/");
-                window.location.reload(); // Refresh to update movie list
+                navigate("/"); // Redirect on success
             }
         } catch (error) {
-            console.error("Error adding/updating movie:", error.message);
+            console.error("Error adding movie:", error);
+            alert(error.message || "An error occurred while adding the movie");
         }
     };
-    
+
     return (
         <div className="w-full flex justify-center">
             <div className="flex-row bg-slate-900 p-8 rounded-md shadow-sm w-3/5">
@@ -121,12 +125,11 @@ const AddMovie = () => {
                         <input
                             type="file"
                             onChange={handleImage}
+                            accept="image/*"
                             className="file-input file-input-bordered file-input-primary w-full"
                         />
-                        <div className="h-1/6 w-1/6 ">
-                            {selectImageUrl && (
-                                <img className="rounded-sm" src={selectImageUrl} alt="Movie preview" />
-                            )}
+                        <div className="h-1/6 w-1/6">
+                            <img className="rounded-sm" src={selectImageUrl} alt="" />
                         </div>
                     </div>
                 </div>
@@ -166,7 +169,7 @@ const AddMovie = () => {
                     </div>
                     <div className="my-3 flex flex-wrap">
                         {genreList.map((item) => (
-                            <div key={item.key} className="form-control ">
+                            <div key={item.key} className="form-control">
                                 <label className="label cursor-pointer space-x-2">
                                     <span className="label-text text-white">{item.genre}</span>
                                     <input
@@ -182,9 +185,7 @@ const AddMovie = () => {
                         ))}
                     </div>
                     <div>
-                        <button
-                            className="btn btn-block bg-primary"
-                            onClick={handleAddMovie}>
+                        <button className="btn btn-block bg-primary" onClick={handleAddMovie}>
                             Submit
                         </button>
                     </div>

@@ -25,7 +25,7 @@ function AddGenre() {
                 id: genreId,
                 genre,
             },
-        });
+        });        
 
         if (response.status == 200 && genreId != 0) {
             const index = genreList.findIndex((item) => item._id == genreId);
@@ -64,7 +64,7 @@ function AddGenre() {
                 <div>
                     <div className="form-control w-full">
                         <label className="label">
-                            <span className="label-text text-white">Title</span>
+                            <span className="label-text">Title</span>
                         </label>
                         <div className="flex w-full gap-3 text-black">
                             <input
@@ -81,9 +81,9 @@ function AddGenre() {
                     </div>
 
                     <div className="flex  flex-wrap">
-                        {genreList.map((item,index) => (
+                        {genreList.map((item) => (
                             <div
-                                key={item._id || index}
+                                key={item._id}
                                 className="w-1/4 m-5 border-2 border-gray-700 p-2 rounded-md">
                                 <div className="flex justify-end space-x-2 border-b-[1px] border-b-gray-700 pb-3">
                                     <div onClick={() => handleEditGenre(item._id, item.genre)}>

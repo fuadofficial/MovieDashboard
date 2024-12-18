@@ -1,23 +1,13 @@
 const mongoose = require("mongoose");
 
-//create proper shema for movie
-const movieShema = mongoose.Schema(
+const movieSchema = mongoose.Schema(
   {
-    imageName: String,
-    movieName: {
-      type: String,
-      trim: true,
-      required: true,
-    },
+    movieName: { type: String, trim: true, required: true },
     rating: Number,
-    genre: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "genre",
-      },
-    ],
+    genre: [{ type: mongoose.Schema.Types.ObjectId, ref: "genre" }],
+    imageName: { type: String }, // Added imageName field
   },
-  { timestamps: true, strict: false }
+  { timestamps: true }
 );
 
-module.exports = mongoose.model("Movies", movieShema);
+module.exports = mongoose.model("Movies", movieSchema);
