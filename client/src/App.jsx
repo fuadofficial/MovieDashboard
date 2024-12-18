@@ -1,4 +1,3 @@
-import "./App.css";
 import MovieList from "./components/MovieList";
 import Home from "./pages/Home";
 import AddMovie from "./pages/AddMovie";
