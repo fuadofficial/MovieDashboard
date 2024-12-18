@@ -18,10 +18,13 @@ router.post("/", async (req, res) => {
   try {
     const movie = {
       movieName: req.body.movieName,
+      description: req.body.description,
       rating: req.body.rating,
       genre: req.body.genre,
       imageName: req.body.imageName, // Save image URL to database
     };
+    console.log(movie);
+    
 
     if (req.body.id != 0) {
       const resmovie = await movieModel.findByIdAndUpdate(req.body.id, { ...movie });

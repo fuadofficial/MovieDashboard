@@ -13,6 +13,7 @@ const AddMovie = () => {
     const [genreList, setGenreList] = useState([]);
     const [checkedGenre, setCheckedGenre] = useState([]);
     const [movieName, setMovieName] = useState("");
+    const [description, setDescription] = useState("");
     const [movieId, setMovieId] = useState(0);
     const [selectImageUrl, setSelecedImageUrl] = useState(null);
 
@@ -31,10 +32,11 @@ const AddMovie = () => {
             method: "POST",
             data: { id },
         });
-        const { rating, genre, movieName, _id, imageName } = response?.data;
+        const { rating, genre, movieName,description, _id, imageName } = response?.data;
         setRating(rating);
         setCheckedGenre(genre);
         setMovieName(movieName);
+        setDescription(description);
         setMovieId(_id);
         setSelecedImageUrl(imageName);
     };
@@ -97,6 +99,7 @@ const AddMovie = () => {
             // Send data to backend
             const payload = {
                 movieName,
+                description,
                 id: movieId,
                 rating,
                 genre: checkedGenre,
@@ -142,6 +145,18 @@ const AddMovie = () => {
                             type="text"
                             value={movieName}
                             onChange={(e) => setMovieName(e.target.value)}
+                            placeholder="Type here"
+                            className="input input-bordered w-full text-black"
+                        />
+                    </div>
+                    <div className="form-control w-full">
+                        <label className="label">
+                            <span className="label-text text-white">Description</span>
+                        </label>
+                        <input
+                            type="text"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
                             placeholder="Type here"
                             className="input input-bordered w-full text-black"
                         />
